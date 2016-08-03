@@ -12,12 +12,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class SkypeManager {
-	
+
 	private final String[] contacts;
 	private final ChatManagerFactory cmf;
 	private final HashMap<Chat, ChatManager> managers;
 	private final ArrayList<String> recentMessageIds;
-	
+
 	public SkypeManager(ChatManagerFactory cmf, String... contacts) throws SkypeException {
 		this.contacts = contacts;
 		this.recentMessageIds = new ArrayList<>();
@@ -25,7 +25,7 @@ public class SkypeManager {
 		managers = new HashMap<>();
 		start();
 	}
-	
+
 	private void start() throws SkypeException {
 		Skype.addGlobalChatListener(new GlobalChatListener() {
 			@Override
@@ -41,20 +41,21 @@ public class SkypeManager {
 
 			@Override
 			public void userAdded(Chat chat, User user) { }
-			
+
 		});
-		
+
 		Skype.addChatMessageListener(new ChatMessageListener() {
 			@Override
-			public void chatMessageReceived(ChatMessage cm) throws SkypeException {Chat chat = cm.getChat();
+			public void chatMessageReceived(ChatMessage cm) throws SkypeException {
+				Chat chat = cm.getChat();
 				if(!recentMessageIds.contains(cm.getId()) && checkUsers(chat.getAllMembers())) {
 					recentMessageIds.add(cm.getId());
 					while(recentMessageIds.size() > 20) {
 						recentMessageIds.remove(20);
 					}
-					
+
 					System.out.println("[Info] Chat message recieved from "+cm.getSenderDisplayName()+": "+cm.getContent());
-				
+
 					if(!managers.containsKey(chat)) {
 						managers.put(chat, cmf.createChatManager(chat));
 					}
@@ -64,16 +65,18 @@ public class SkypeManager {
 
 			@Override
 			public void chatMessageSent(ChatMessage cm) throws SkypeException { }
-			
+
 		});
 	}
-	
+
+	//Any match
 	private boolean checkUsers(User... users) {
+		outerloop:
 		for(User user : users) {
 			String userId = user.getId();
 			for(String contact : contacts) {
-				if(!userId.equals(contact)) {
-					return false;
+				if(userId.equals(contact)) {
+					return true;
 				}
 			}
 		}
