@@ -54,13 +54,13 @@ public class SkypeManager {
 						recentMessageIds.remove(20);
 					}
 
-					System.out.println("[Info] Chat message recieved from "+cm.getSenderDisplayName()+": "+cm.getContent());
 
 					if(!managers.containsKey(chat)) {
 						managers.put(chat, cmf.createChatManager(chat));
 					}
 					managers.get(chat).respond(cm.getContent());
 				}
+				System.out.println("[Info] Chat message recieved from "+cm.getSenderDisplayName()+": "+cm.getContent());
 			}
 
 			@Override
