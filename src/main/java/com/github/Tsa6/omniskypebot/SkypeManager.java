@@ -1,7 +1,5 @@
 package com.github.Tsa6.omniskypebot;
 
-import com.github.Tsa6.omniskypebot.chatmanagers.ChatManagerFactory;
-import com.github.Tsa6.omniskypebot.chatmanagers.ChatManager;
 import com.skype.Chat;
 import com.skype.ChatMessage;
 import com.skype.ChatMessageListener;
